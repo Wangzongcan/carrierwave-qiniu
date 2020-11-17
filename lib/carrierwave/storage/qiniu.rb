@@ -26,7 +26,16 @@ module CarrierWave
       # Deletes a cache dir
       #
       def delete_dir!(path)
-        # do nothing, because there's no such things as 'empty directory'
+        path = Rack::Utils.escape_path(path)
+        QiniuFile.new(uploader, uploader.store_path).tap do |qiniu_file|
+          conn = qiniu_file.send(:qiniu_connection)
+          result = conn.list({ prefix: path })
+
+          raise result["error"] if result.has_key?("error")
+
+          keys = result["items"].map {|it| it["key"]}
+          conn.batch_delete(keys)
+        end
       end
 
       def clean_cache!(seconds)

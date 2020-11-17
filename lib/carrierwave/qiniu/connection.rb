@@ -99,6 +99,27 @@ module CarrierWave
         success
       end
 
+      # 批量删除
+      #
+      def batch_delete(keys)
+        success = ::Qiniu.batch_delete(
+            @qiniu_bucket,
+            keys
+        )
+        success
+      end
+
+      # 获取列表信息
+      #
+      def list(list_policy)
+        code, result, response_headers, s, d = ::Qiniu::Storage.list(::Qiniu::Storage::ListPolicy.new(
+          @qiniu_bucket,
+          list_policy[:limit] || 100,
+          list_policy[:prefix],
+          ''
+        ))
+        result
+      end
       #
       # 获取文件信息
       # @param  key [String]
