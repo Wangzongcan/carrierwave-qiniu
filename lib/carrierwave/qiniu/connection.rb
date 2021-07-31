@@ -133,8 +133,8 @@ module CarrierWave
         info
       end
 
-      def get(path)
-        code, result, _ = ::Qiniu::HTTP.get(download_url(path))
+      def get(path, opts = {})
+        code, result, _ = ::Qiniu::HTTP.get(download_url(path), opts)
         code == 200 ? result : nil
       end
 
