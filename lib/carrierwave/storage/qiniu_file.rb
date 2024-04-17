@@ -36,7 +36,6 @@ module CarrierWave
         else
           qiniu_connection.upload_file(new_file.path, @path)
         end
-        true
       end
 
       def delete

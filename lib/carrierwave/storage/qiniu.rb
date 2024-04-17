@@ -3,15 +3,21 @@ module CarrierWave
   module Storage
     class Qiniu < Abstract
       def store!(file)
-        QiniuFile.new(uploader, uploader.store_path).tap do |qiniu_file|
+        success = QiniuFile.new(uploader, uploader.store_path).tap do |qiniu_file|
           qiniu_file.store(file)
         end
+        raise "无法上传文件到七牛" unless success
+
+        success
       end
 
       def cache!(file)
-        QiniuFile.new(uploader, uploader.cache_path).tap do |qiniu_file|
+        success = QiniuFile.new(uploader, uploader.cache_path).tap do |qiniu_file|
           qiniu_file.store(file)
         end
+        raise "无法上传文件到七牛" unless success
+
+        success
       end
 
       def retrieve!(identifier)
