@@ -1,6 +1,5 @@
 # encoding: utf-8
 
-
 module CarrierWave
   module Qiniu
     class Connection
@@ -67,6 +66,7 @@ module CarrierWave
             @qiniu_bucket,
             target
         )
+        raise ::CarrierWave::ProcessingError, "无法复制文件" unless success
         success
       end
 
@@ -77,12 +77,14 @@ module CarrierWave
       # @return [Boolean]
       #
       def move(origin, target)
+        origin = "tmp/tmp_file"
         success = ::Qiniu.move(
             @qiniu_bucket,
             origin, # 源资源名
             @qiniu_bucket,
             target # 目标资源名
         )
+        raise ::CarrierWave::ProcessingError, "无法移动文件" unless success
         success
       end
 
@@ -96,6 +98,7 @@ module CarrierWave
             @qiniu_bucket,
             key
         )
+        raise ::CarrierWave::ProcessingError, "无法删除文件" unless success
         success
       end
 
@@ -106,6 +109,7 @@ module CarrierWave
             @qiniu_bucket,
             keys
         )
+        raise ::CarrierWave::ProcessingError, "无法批量删除文件" unless success
         success
       end
 
